@@ -3,149 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Для тебя</title>
+    <title>Для тебя, самая любимая</title>
     <style>
-        body {
-            margin: 0;
-            background: #0a0a0a;
-            color: #fff;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
-            line-height: 1.6;
+        :root {
+            --accent: #ff4d6d;
+            --bg: #050505;
+            --glass: rgba(255, 255, 255, 0.05);
         }
 
-        .header {
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: #fff;
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Анимация сердец */
+        .hearts {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+        }
+
+        .heart {
+            position: absolute;
+            color: var(--accent);
+            font-size: 18px;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Главный экран */
+        .hero {
             height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            background: linear-gradient(to bottom, transparent 60%, #0a0a0a 100%), 
-                        url('IMG_20260330_120928_539.jpg');
+            background: linear-gradient(rgba(0,0,0,0.7), var(--bg)), 
+                        url('WhatsApp Image 2026-03-30 at 11.32.55.jpeg');
             background-size: cover;
             background-position: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 10vw, 4.5rem);
+            margin: 0;
+            letter-spacing: -2px;
+            background: linear-gradient(to bottom, #fff, #ff758f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Сетка с фото */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .letter {
+            text-align: center;
+            padding: 60px 0;
+            font-size: 1.3rem;
+            color: #d1d1d1;
+            line-height: 1.8;
+        }
+
+        .grid {
+            display: columns;
+            column-count: 3;
+            column-gap: 20px;
+        }
+
+        @media (max-width: 900px) { .grid { column-count: 2; } }
+        @media (max-width: 600px) { .grid { column-count: 1; } }
+
+        .item {
+            margin-bottom: 20px;
+            break-inside: avoid;
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 8px;
+            transition: 0.4s;
+        }
+
+        .item:hover {
+            transform: scale(1.02);
+            border-color: var(--accent);
+            box-shadow: 0 0 25px rgba(255, 77, 109, 0.3);
+        }
+
+        .item img, .item video {
             width: 100%;
-        }
-
-        h1 { font-size: 3.5rem; margin-bottom: 10px; color: #f0f0f0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-        p.subtitle { font-size: 1.4rem; color: #aaa; margin-top: 0; }
-
-        .memory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            padding: 60px 20px;
-            max-width: 1400px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .card {
-            background: #161616;
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-
-        .card:hover { 
-            transform: translateY(-8px); 
-            border-color: #444; 
-            box-shadow: 0 10px 15px rgba(0,0,0,0.5);
-        }
-
-        .card img, .card video {
-            width: 100%;
-            height: auto; /* Позволяем высоте адаптироваться под фото */
-            max-height: 450px; /* Ограничиваем максимальную высоту */
-            object-fit: cover;
+            border-radius: 15px;
             display: block;
         }
 
-        .message-section {
-            padding: 80px 20px;
+        .footer-btn {
             text-align: center;
-            max-width: 800px;
+            margin-top: 80px;
+            margin-bottom: 100px;
         }
 
-        .message-section h2 {
-            font-size: 2.5rem;
-            color: #eaeaea;
-            margin-bottom: 20px;
-        }
-
-        .message-section p {
-            font-size: 1.2rem;
-            color: #bbbbbb;
-            margin-bottom: 40px;
-        }
-
-        .btn-github {
-            padding: 18px 35px;
-            background: #fff;
-            color: #000;
+        .btn {
+            padding: 20px 50px;
+            background: var(--accent);
+            color: #fff;
             text-decoration: none;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            transition: background 0.2s ease;
-            display: inline-block;
+            border-radius: 100px;
+            font-weight: 600;
+            transition: 0.3s;
+            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.4);
         }
 
-        .btn-github:hover {
-            background: #eee;
-        }
-
-        @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            p.subtitle { font-size: 1.1rem; }
-            .memory-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); padding: 40px 15px; }
+        .btn:hover {
+            transform: translateY(-5px);
+            filter: brightness(1.1);
         }
     </style>
 </head>
 <body>
 
-    <section class="header">
-        <h1>Прости меня</h1>
-        <p class="subtitle">Я помню каждый наш момент...</p>
+    <div class="hearts" id="hearts"></div>
+
+    <section class="hero">
+        <h1>Я очень тебя люблю</h1>
+        <p style="opacity: 0.7; margin-top: 15px;">Прости меня за всё...</p>
     </section>
 
-    <section class="message-section">
-        <h2>Наши общие воспоминания</h2>
-        <p>Мы давно не общались, но эти фото напоминают мне о том, как нам было хорошо вместе. Я ценю каждый миг, проведённый с тобой, и хочу всё исправить.</p>
-    </section>
+    <div class="container">
+        <div class="letter">
+            <p>Мы столько всего прошли вместе. Каждое это фото — бесценное воспоминание о том дне, когда мы были самыми счастливыми. Я не хочу это терять.</p>
+        </div>
 
-    <div class="memory-grid">
-        <div class="card"><img src="IMG_20260330_120928_539.jpg" alt="Воспоминание 1"></div>
-        <div class="card"><img src="IMG_20260330_120918_784.jpg" alt="Воспоминание 2"></div>
-        <div class="card"><img src="IMG_20260330_120918_758.jpg" alt="Воспоминание 3"></div>
-        <div class="card"><img src="IMG_20260330_120900_796.jpg" alt="Воспоминание 4"></div>
-        <div class="card"><img src="IMG_20260330_120853_473.jpg" alt="Воспоминание 5"></div>
-        <div class="card"><img src="IMG_20260330_120817_840.jpg" alt="Воспоминание 6"></div>
-        <div class="card"><img src="IMG_20260330_120817_471.jpg" alt="Воспоминание 7"></div>
-        <div class="card"><img src="IMG_20260330_120928_407.jpg" alt="Воспоминание 8"></div>
-        <div class="card"><img src="IMG_20260325_221114_181.jpg" alt="Воспоминание 9"></div>
-        <div class="card"><img src="IMG_20260330_120918_587.jpg" alt="Воспоминание 10"></div>
-        <div class="card"><img src="IMG_20260330_120918_879.jpg" alt="Воспоминание 11"></div>
-        <div class="card"><img src="IMG-20250715-WA0135.jpg" alt="Воспоминание 12"></div>
-        
-        <div class="card">
-            <video controls preload="metadata">
-                <source src="VID_20260330_120929_114.mp4" type="video/mp4">
-                Ваш браузер не поддерживает видео.
-            </video>
+        <div class="grid">
+            <div class="item"><img src="WhatsApp Image 2026-03-30 at 11.32.55 (2).jpeg"></div>
+            <div class="item"><img src="WhatsApp Image 2026-03-30 at 11.32.55.jpeg"></div>
+            <div class="item"><img src="WhatsApp Image 2026-03-30 at 11.32.56 (1).jpeg"></div>
+            <div class="item"><img src="WhatsApp Image 2026-03-30 at 11.32.56 (2).jpeg"></div>
+            <div class="item"><img src="WhatsApp Image 2026-03-30 at 11.32.56 (3).jpeg"></div>
+            <div class="item"><img src="WhatsApp Image 2026-03-30 at 11.32.56 (4).jpeg"></div>
+            <div class="item"><img src="WhatsApp Image 2026-03-30 at 11.32.56.jpeg"></div>
+            <div class="item"><img src="WhatsApp Image 2026-03-30 at 11.32.57.jpeg"></div>
+            <div class="item"><img src="WhatsApp Image 2026-03-30 at 11.32.57 (1).jpeg"></div>
+            <div class="item"><img src="WhatsApp Image 2026-03-30 at 11.32.57 (2).jpeg"></div>
+            <div class="item"><img src="WhatsApp Image 2026-03-30 at 11.32.58.jpeg"></div>
+            <div class="item"><img src="WhatsApp Image 2026-03-30 at 11.32.59.jpeg"></div>
+            
+            <div class="item">
+                <video controls>
+                    <source src="WhatsApp Video 2026-03-30 at 11.33.42.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+
+        <div class="footer-btn">
+            <a href="https://github.com/" class="btn">Давай поговорим?</a>
         </div>
     </div>
 
-    <section class="message-section">
-        <p>Я очень скучаю. Если ты готова поговорить, нажми кнопку ниже.</p>
-        <a href="https://github.com/ВАШ_ПРОФИЛЬ" class="btn-github">Написать мне (GitHub)</a>
-    </section>
-
+    <script>
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            heart.style.opacity = Math.random();
+            document.getElementById('hearts').appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+        setInterval(createHeart, 400);
+    </script>
 </body>
 </html>
