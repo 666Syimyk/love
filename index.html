@@ -4,37 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Для тебя, самая любимая</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --accent: #ff4d6d;
-            --bg: #050505;
-            --glass: rgba(255, 255, 255, 0.05);
+            --accent-glow: rgba(255, 77, 109, 0.4);
+            --bg: #030303;
+            --text-cormorant: 'Cormorant Garamond', serif;
+            --text-montserrat: 'Montserrat', sans-serif;
+            --glass: rgba(10, 10, 10, 0.8);
         }
+
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
             background: var(--bg);
-            color: #fff;
-            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            color: #eaeaea;
+            font-family: var(--text-montserrat);
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* Анимация сердец */
+        /* Улучшенная анимация сердец */
         .hearts {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 0;
+            pointer-events: none; z-index: -1;
         }
 
         .heart {
             position: absolute;
             color: var(--accent);
-            font-size: 18px;
-            animation: fall linear infinite;
+            font-size: 16px;
+            opacity: 0.7;
+            animation: fallAndGlow linear infinite;
         }
 
-        @keyframes fall {
-            to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        @keyframes fallAndGlow {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
         /* Главный экран */
@@ -45,8 +56,8 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            /* Путь к главному фото тоже изменен на img/ */
-            background: linear-gradient(rgba(0,0,0,0.7), var(--bg)), 
+            /* Измени на свое заглавное фото, если это не работает */
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, var(--bg) 100%), 
                         url('img/WhatsApp Image 2026-03-30 at 11.32.55.jpeg');
             background-size: cover;
             background-position: center;
@@ -54,72 +65,106 @@
         }
 
         .hero h1 {
-            font-size: clamp(2rem, 10vw, 4.5rem);
+            font-family: var(--text-cormorant);
+            font-size: clamp(2.5rem, 12vw, 5rem);
             margin: 0;
-            letter-spacing: -2px;
-            background: linear-gradient(to bottom, #fff, #ff758f);
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff, var(--accent), #ffffff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(255,255,255,0.2);
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 80px 20px;
             position: relative;
-            z-index: 1;
         }
 
         .letter {
             text-align: center;
-            padding: 60px 0;
-            font-size: 1.3rem;
-            color: #d1d1d1;
-            line-height: 1.8;
+            padding: 0 0 100px 0;
+            font-size: clamp(1rem, 4vw, 1.3rem);
+            color: #cccccc;
+            font-weight: 300;
+            line-height: 1.9;
         }
 
+        /* Улучшенный Masonry grid */
         .grid {
-            display: columns;
-            column-count: 3;
-            column-gap: 20px;
+            columns: 3;
+            column-gap: 30px;
         }
 
-        @media (max-width: 900px) { .grid { column-count: 2; } }
-        @media (max-width: 600px) { .grid { column-count: 1; } }
+        @media (max-width: 900px) { .grid { columns: 2; } }
+        @media (max-width: 600px) { .grid { columns: 1; } }
 
         .item {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             break-inside: avoid;
-            background: var(--glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 8px;
-            transition: 0.4s;
+            background: #080808;
+            border-radius: 24px;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.03);
+            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
+            opacity: 0;
+            animation: fadeInItem 0.8s ease forwards;
+        }
+
+        .item:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px var(--accent-glow);
         }
 
         .item img, .item video {
             width: 100%;
-            border-radius: 15px;
+            border-radius: 18px;
             display: block;
+            object-fit: cover;
         }
+
+        .item p {
+            font-family: var(--text-cormorant);
+            font-size: 1.2rem;
+            text-align: center;
+            color: #ffffff;
+            margin: 15px 0 10px 0;
+            padding: 0 10px;
+            font-style: italic;
+        }
+
+        .item video { height: auto; }
+
+        @keyframes fadeInItem { to { opacity: 1; } }
 
         .footer-btn {
             text-align: center;
-            margin-top: 80px;
-            margin-bottom: 100px;
+            margin-top: 100px;
+            margin-bottom: 120px;
         }
 
         .btn {
-            padding: 20px 50px;
-            background: var(--accent);
+            padding: 22px 60px;
+            background: linear-gradient(135deg, #ff1a4a 0%, var(--accent) 50%, #ff758f 100%);
             color: #fff;
             text-decoration: none;
             border-radius: 100px;
             font-weight: 600;
-            transition: 0.3s;
-            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.4);
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
             display: inline-block;
+            box-shadow: 0 12px 25px rgba(255, 77, 109, 0.5);
         }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            filter: brightness(1.1);
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.7);
+        }
+
     </style>
 </head>
 <body>
@@ -127,39 +172,87 @@
     <div class="hearts" id="hearts"></div>
 
     <section class="hero">
-        <h1>Я очень тебя люблю</h1>
-        <p style="opacity: 0.7; margin-top: 15px;">Прости меня за всё...</p>
+        <h1>Я тебя люблю</h1>
+        <p style="opacity: 0.8; font-weight: 300; letter-spacing: 1px; font-size: 1.1rem; margin-top: 20px;">Мое сердце всегда было твоим.</p>
     </section>
 
     <div class="container">
         <div class="letter">
-            <p>Мы столько всего прошли вместе. Каждое это фото — бесценное воспоминание о том дне, когда мы были самыми счастливыми. Я не хочу это терять.</p>
+            <p>Я совершил ошибку, не сказав тебе эти слова вовремя. Каждое это воспоминание, каждая минута, проведенная с тобой — самое бесценное в моей жизни.</p>
         </div>
 
         <div class="grid">
-            <!-- Везде добавлен путь img/ -->
-            <div class="item"><img src="img/WhatsApp Image 2026-03-30 at 11.32.55 (2).jpeg"></div>
-            <div class="item"><img src="img/WhatsApp Image 2026-03-30 at 11.32.55.jpeg"></div>
-            <div class="item"><img src="img/WhatsApp Image 2026-03-30 at 11.32.56 (1).jpeg"></div>
-            <div class="item"><img src="img/WhatsApp Image 2026-03-30 at 11.32.56 (2).jpeg"></div>
-            <div class="item"><img src="img/WhatsApp Image 2026-03-30 at 11.32.56 (3).jpeg"></div>
-            <div class="item"><img src="img/WhatsApp Image 2026-03-30 at 11.32.56 (4).jpeg"></div>
-            <div class="item"><img src="img/WhatsApp Image 2026-03-30 at 11.32.56.jpeg"></div>
-            <div class="item"><img src="img/WhatsApp Image 2026-03-30 at 11.32.57.jpeg"></div>
-            <div class="item"><img src="img/WhatsApp Image 2026-03-30 at 11.32.57 (1).jpeg"></div>
-            <div class="item"><img src="img/WhatsApp Image 2026-03-30 at 11.32.57 (2).jpeg"></div>
-            <div class="item"><img src="img/WhatsApp Image 2026-03-30 at 11.32.58.jpeg"></div>
-            <div class="item"><img src="img/WhatsApp Image 2026-03-30 at 11.32.59.jpeg"></div>
+            
+            <div class="item">
+                <img src="img/WhatsApp Image 2026-03-30 at 11.32.55 (2).jpeg">
+                <p>Ты—мое все.</p>
+            </div>
+            
+            <div class="item">
+                <img src="img/WhatsApp Image 2026-03-30 at 11.32.55.jpeg">
+                <p>Свет моих очей.</p>
+            </div>
+            
+            <div class="item">
+                <img src="img/WhatsApp Image 2026-03-30 at 11.32.56 (1).jpeg">
+                <p>Жизнь без тебя—пуста.</p>
+            </div>
+            
+            <div class="item">
+                <img src="img/WhatsApp Image 2026-03-30 at 11.32.56 (2).jpeg">
+                <p>Ты—сама любовь.</p>
+            </div>
+            
+            <div class="item">
+                <img src="img/WhatsApp Image 2026-03-30 at 11.32.56 (3).jpeg">
+                <p>Каждое мгновение—дар.</p>
+            </div>
+            
+            <div class="item">
+                <img src="img/WhatsApp Image 2026-03-30 at 11.32.56 (4).jpeg">
+                <p>Ты—моя бесконечность.</p>
+            </div>
+            
+            <div class="item">
+                <img src="img/WhatsApp Image 2026-03-30 at 11.32.56.jpeg">
+                <p>Люблю тебя сильнее всех.</p>
+            </div>
+            
+            <div class="item">
+                <img src="img/WhatsApp Image 2026-03-30 at 11.32.57.jpeg">
+                <p>Ты—моя радость.</p>
+            </div>
+            
+            <div class="item">
+                <img src="img/WhatsApp Image 2026-03-30 at 11.32.57 (1).jpeg">
+                <p>Мой мир—это ты.</p>
+            </div>
+            
+            <div class="item">
+                <img src="img/WhatsApp Image 2026-03-30 at 11.32.57 (2).jpeg">
+                <p>Жду нашей встречи.</p>
+            </div>
+            
+            <div class="item">
+                <img src="img/WhatsApp Image 2026-03-30 at 11.32.58.jpeg">
+                <p>Любовь моя не угаснет.</p>
+            </div>
+            
+            <div class="item">
+                <img src="img/WhatsApp Image 2026-03-30 at 11.32.59.jpeg">
+                <p>Будь со мной всегда.</p>
+            </div>
             
             <div class="item">
                 <video controls>
                     <source src="img/WhatsApp Video 2026-03-30 at 11.33.42.mp4" type="video/mp4">
                 </video>
+                <p>Помни нас.</p>
             </div>
         </div>
 
         <div class="footer-btn">
-            <a href="https://github.com/" class="btn">Давай поговорим?</a>
+            <a href="https://github.com/" class="btn">Я жду твоего ответа</a>
         </div>
     </div>
 
@@ -169,12 +262,13 @@
             heart.classList.add('heart');
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            heart.style.fontSize = (Math.random() * 10 + 10) + 'px'; // разный размер
+            heart.style.animationDuration = Math.random() * 4 + 4 + 's'; // медленное падение
             heart.style.opacity = Math.random();
             document.getElementById('hearts').appendChild(heart);
-            setTimeout(() => { heart.remove(); }, 5000);
+            setTimeout(() => { heart.remove(); }, 8000);
         }
-        setInterval(createHeart, 400);
+        setInterval(createHeart, 350);
     </script>
 </body>
 </html>
